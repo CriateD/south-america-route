@@ -18,6 +18,8 @@
   --leg-pt:#3B6EA8;
   --leg-ba:#7A3B54;
   --leg-br:#4C8B3A;
+  --leg-mz:#7A4A8B;
+  --leg-uy:#3E7A8C;
   --shadow: 0 1px 2px rgba(28,35,29,0.06);
 }
 @media (prefers-color-scheme: dark){
@@ -36,6 +38,8 @@
     --leg-pt:#75A6DE;
     --leg-ba:#BD7896;
     --leg-br:#82C06C;
+    --leg-mz:#B080C4;
+    --leg-uy:#6BADC2;
     --shadow: 0 1px 3px rgba(0,0,0,0.4);
   }
 }
@@ -54,6 +58,8 @@
   --leg-pt:#75A6DE;
   --leg-ba:#BD7896;
   --leg-br:#82C06C;
+  --leg-mz:#B080C4;
+  --leg-uy:#6BADC2;
   --shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
@@ -67,7 +73,7 @@ body{
 }
 ::selection{ background:var(--accent); color:var(--accent-ink); }
 
-.wrap{ max-width:840px; margin:0 auto; padding:56px 24px 96px; }
+.wrap{ max-width:860px; margin:0 auto; padding:56px 24px 96px; }
 
 .kicker{
   font-family:'IBM Plex Mono', monospace;
@@ -89,7 +95,7 @@ h1{
 .lede{
   font-size:17px;
   color:var(--muted);
-  max-width:60ch;
+  max-width:62ch;
   margin:0 0 40px;
 }
 
@@ -129,14 +135,40 @@ h2{
   margin:0 0 6px;
   text-wrap:balance;
 }
+h3.month-h{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12.5px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--ink);
+  background:var(--surface-alt);
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:5px 12px;
+  display:inline-block;
+  margin:0 0 18px;
+}
 .section-note{
   color:var(--muted);
   font-size:14.5px;
   margin:0 0 28px;
-  max-width:62ch;
+  max-width:64ch;
 }
 
+.maplink{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  color: var(--leg-color, var(--accent));
+  text-decoration:none;
+  border-bottom:1px solid currentColor;
+  white-space:nowrap;
+  margin-left:6px;
+}
+.maplink:hover{ opacity:.7; }
+
 /* Route timeline */
+.month{ margin-bottom:40px; }
+.month:last-child{ margin-bottom:0; }
 .route{ position:relative; padding-left:28px; }
 .route::before{
   content:"";
@@ -145,7 +177,7 @@ h2{
   width:2px;
   background:var(--line);
 }
-.leg{ position:relative; padding-bottom:38px; }
+.leg{ position:relative; padding-bottom:34px; }
 .leg:last-child{ padding-bottom:0; }
 .leg::before{
   content:"";
@@ -156,35 +188,39 @@ h2{
   background:var(--leg-color);
   box-shadow:0 0 0 4px var(--bg);
 }
+.leg.is-open::before{ background:var(--bg); border:2px dashed var(--muted); }
+.leg.is-open .leg-name{ color:var(--muted); }
 .leg-head{
   display:flex;
   align-items:baseline;
   flex-wrap:wrap;
-  gap:8px 14px;
+  gap:6px 14px;
   margin-bottom:6px;
 }
 .leg-name{
   font-family:'Big Shoulders Display', system-ui, sans-serif;
   font-weight:700;
-  font-size:22px;
+  font-size:21px;
   color:var(--leg-color);
 }
 .leg-when{
   font-family:'IBM Plex Mono', monospace;
-  font-size:12.5px;
+  font-size:12px;
   color:var(--muted);
   letter-spacing:.02em;
 }
 .leg-stops{
   font-size:15px;
   margin:0 0 8px;
+  line-height:1.6;
 }
 .leg-note{
   font-size:14px;
   color:var(--muted);
   margin:0 0 8px;
-  max-width:58ch;
+  max-width:60ch;
 }
+.leg-note + .leg-note{ margin-top:-4px; }
 .leg-tags{
   display:flex; flex-wrap:wrap; gap:8px;
 }
@@ -199,6 +235,29 @@ h2{
   white-space:nowrap;
 }
 .tag b{ color:var(--leg-color); font-weight:600; }
+
+/* Car rental cards */
+.car-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:4px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.car-card{ background:var(--surface); padding:18px 20px; }
+.car-card h4{
+  font-family:'Big Shoulders Display', system-ui, sans-serif;
+  font-size:19px;
+  font-weight:700;
+  margin:0 0 8px;
+  color:var(--car-color, var(--accent));
+}
+.car-card p{ font-size:13.5px; color:var(--muted); margin:0 0 6px; }
+.car-card p:last-child{ margin-bottom:0; }
+.car-card b{ color:var(--ink); }
 
 /* Budget tables */
 .table-scroll{ overflow-x:auto; border:1px solid var(--line); border-radius:4px; }
@@ -294,96 +353,300 @@ footer{
 
 <div class="wrap">
 
-  <p class="kicker">Дмитрий · план на выезд из Варшавы, декабрь 2026</p>
-  <h1>Южная Америка,<br>открытый маршрут</h1>
-  <p class="lede">Шесть отрезков — от заселения в Колумбии до Рио — собранные вокруг твоего списка (Мачу-Пикчу, Патагония, Атакама/Боливия, водопады Игуасу), с чередованием «жить и работать» и «ехать смотреть». Конец даты не фиксируем — маршрут держит форму сам по себе, дальше апреля можно продлевать в любую сторону.</p>
+  <p class="kicker">Дмитрий · старт из Варшавы 22 декабря 2026</p>
+  <h1>Южная Америка,<br>по неделям на 5 месяцев</h1>
+  <p class="lede">22 декабря 2026 — 22 мая 2027. Девять отрезков, три из них за рулём (Колумбия, Патагония, Мендоса), у каждого — даты, ссылка на карту и разбор «как это работает на месте». Ритм — база на 2–3 недели с вылазками, а не гостиница каждую ночь.</p>
 
   <div class="stat-row">
     <div class="stat">
-      <p class="stat-label">Формат</p>
-      <p class="stat-value">2–5 недель на базе + вылазки на 4–10 дней</p>
+      <p class="stat-label">Сроки</p>
+      <p class="stat-value">22 дек 2026 → 22 мая 2027, ровно 5 месяцев по неделям</p>
     </div>
     <div class="stat">
-      <p class="stat-label">Виза</p>
-      <p class="stat-value">90 из 180 дней — в каждой стране отдельно, счётчики не пересекаются</p>
+      <p class="stat-label">Темп</p>
+      <p class="stat-value">~16 остановок на 152 дня — смена места раз в ~9 дней, не каждый день</p>
     </div>
     <div class="stat">
-      <p class="stat-label">Деньги</p>
-      <p class="stat-value">Вся поездка — из подушки на 12 мес., инвестиционное ядро не трогаем</p>
+      <p class="stat-label">Машина</p>
+      <p class="stat-value">3 автопробега своим ходом — Колумбия, Патагония, Мендоса. Уюни только с гидом</p>
     </div>
   </div>
 
   <section>
-    <h2>Маршрут</h2>
-    <p class="section-note">Порядок подобран под сезон: карнавал в Рио 5–13 февраля 2027 — жёсткая дата, вокруг неё выстроен весь хвост маршрута; Патагония сдвинута на вторую половину февраля-март (там ещё сезон, и ветра обычно меньше, чем в декабре); зеркало Уюни лучше всего в дождливый январь; классический трек Мачу-Пикчу закрыт на обслуживание весь февраль — если хочешь идти ногами, а не только поездом, делай это в январе.</p>
+    <h2>Аренда машины — где, как и где не надо</h2>
+    <p class="section-note">Три отдельных проката, не один сквозной — континент к этому не располагает. Погранпереход на арендованной машине из Аргентины в Чили разрешают единицы контор (замечен Europcar), это отдельное разрешение + доплата ~150 $ + расширенная страховка, машину всё равно нужно вернуть в ту же страну, где взял — сквозного «туда и не сюда» проката не существует. Поэтому в Патагонии — два отдельных проката со сдачей и трансфером автобусом на границе, это и дешевле, и без лишней бюрократии.</p>
 
-    <div class="route">
-
-      <div class="leg" style="--leg-color:var(--leg-co)">
-        <div class="leg-head">
-          <span class="leg-name">Колумбия</span>
-          <span class="leg-when">декабрь</span>
-        </div>
-        <p class="leg-stops">Богота → Медельин (Побладо / Ларедо)</p>
-        <p class="leg-note">Заход в маршрут: акклиматизация к смене часового пояса (UTC−5, вечер совпадает с концом рабочего дня в Польше), настройка рабочего ритма, самая плотная нома-тусовка на континенте.</p>
-        <div class="leg-tags"><span class="tag"><b>база</b> · жить + работать</span></div>
+    <div class="car-grid">
+      <div class="car-card" style="--car-color:var(--leg-co)">
+        <h4>Колумбия · кофейный регион</h4>
+        <p>Самый лёгкий из трёх — asphalt, указатели, риск только вечером на трассах вне города.</p>
+        <p><b>Где брать:</b> Армения или Перейра, забрал-сдал в одном месте.</p>
+        <p><b>~4 дня</b>, разминка перед Патагонией.</p>
       </div>
-
-      <div class="leg" style="--leg-color:var(--leg-pe)">
-        <div class="leg-head">
-          <span class="leg-name">Перу</span>
-          <span class="leg-when">январь</span>
-        </div>
-        <p class="leg-stops">Куско → Священная долина → тропа инков (4 дня) → Мачу-Пикчу → Пуэрто-Мальдонадо (джунгли Тамбопаты)</p>
-        <p class="leg-note">Куско на высоте ~3400 м — заложи 2–3 спокойных дня на акклиматизацию до трека: без алкоголя, больше воды, коку в чай не глядя на скепсис. Из Куско — короткий перелёт в Тамбопату: 2–3 ночи в лодже среди амазонских джунглей закрывают сразу два пункта из списка. Точные даты трека сдвинутся под то, на какой пермит получится встать — не под расписание.</p>
-        <div class="leg-tags"><span class="tag"><b>из списка</b> · тропа инков, Мачу-Пикчу, джунгли Амазонки, хижина в джунглях</span><span class="tag">высота ~3400 м</span><span class="tag">пермит — бронь заранее</span></div>
+      <div class="car-card" style="--car-color:var(--leg-pt)">
+        <h4>Патагония · главный автопробег</h4>
+        <p>Два отдельных проката: Эль-Калафате (Аргентина) и Пунта-Аренас/Пуэрто-Наталес (Чили) — между ними автобус-шаттл через границу.</p>
+        <p>Гравийные участки Ruta 40, заправки редкие — бак всегда полный.</p>
+        <p><b>~2.5 недели</b> суммарно за рулём.</p>
       </div>
-
-      <div class="leg" style="--leg-color:var(--leg-at)">
-        <div class="leg-head">
-          <span class="leg-name">Атакама → Боливия</span>
-          <span class="leg-when">конец января</span>
-        </div>
-        <p class="leg-stops">Сан-Педро-де-Атакама (Чили) → переход границы → Уюни (Боливия)</p>
-        <p class="leg-note">Дождливый сезон здесь — плюс: именно сейчас на солончаке Уюни появляется тонкий слой воды и знаменитый эффект зеркала. Рядом с Сан-Педро — вулкан Ликанкабур (потухший, ~5900 м), на кратер можно подняться однодневным треком, не обязательно штурмовать вершину. Наличка обязательна — Боливия вне туристических отелей карты почти не берёт. Отрезок держим компактным (~10 дней) — дальше жёсткая дата в Рио.</p>
-        <div class="leg-tags"><span class="tag"><b>из списка</b> · соляное озеро, кратер вулкана</span><span class="tag">высота ~3650 м</span><span class="tag">только кэш</span></div>
+      <div class="car-card" style="--car-color:var(--leg-mz)">
+        <h4>Мендоса · бонус, вино</h4>
+        <p>Самый спокойный прокат — равнинные дороги виноделен, без стресса Патагонии.</p>
+        <p><b>Где брать:</b> город Мендоса.</p>
+        <p><b>~1.5 недели</b>, база в одном месте.</p>
       </div>
-
-      <div class="leg" style="--leg-color:var(--leg-br)">
-        <div class="leg-head">
-          <span class="leg-name">Рио + Игуасу</span>
-          <span class="leg-when">начало февраля</span>
-        </div>
-        <p class="leg-stops">Рио-де-Жанейро (карнавал 5–13 февраля 2027) → водопады Игуасу (аргентинская + бразильская стороны)</p>
-        <p class="leg-note"><b>Жёсткая точка всего маршрута.</b> На карнавальную неделю жильё и перелёты дорожают в 3–4 раза и разбираются на полгода вперёд — бронировать имеет смысл уже сейчас, не откладывая на "по ходу". После карнавала — Игуасу, заходить на водопады с обеих сторон границы, виды принципиально разные.</p>
-        <div class="leg-tags"><span class="tag"><b>из списка</b> · Рио, Игуасу</span><span class="tag">бронь заранее</span></div>
-      </div>
-
-      <div class="leg" style="--leg-color:var(--leg-pt)">
-        <div class="leg-head">
-          <span class="leg-name">Патагония</span>
-          <span class="leg-when">вторая половина февраля – март</span>
-        </div>
-        <p class="leg-stops">Эль-Калафате / Эль-Чальтен (Аргентина) + Пуэрто-Наталес / Торрес-дель-Пайне (Чили)</p>
-        <p class="leg-note">Хвост сезона — по факту часто спокойнее декабря по ветру, но к концу марта треки и рефухио массово закрываются на зиму, так что запас по срокам небольшой. Бронировать рефухио/кемпинги на W-трек стоит заранее, места разлетаются за месяцы.</p>
-        <div class="leg-tags"><span class="tag"><b>из списка</b> · Патагония</span><span class="tag">хвост сезона трекинга</span></div>
-      </div>
-
-      <div class="leg" style="--leg-color:var(--leg-ba)">
-        <div class="leg-head">
-          <span class="leg-name">Буэнос-Айрес</span>
-          <span class="leg-when">март</span>
-        </div>
-        <p class="leg-stops">Реколета / Пуэрто-Мадеро / Палермо</p>
-        <p class="leg-note">Вторая «база жизни» после переездного отрезка: отдых, рабочий ритм, город с плотностью кафе и коворкингов не хуже Медельина. Заодно и хаб для перелётов в Патагонию и обратно. Актуальный обменный курс для тех, кто платит в валюте, стоит смотреть непосредственно перед приездом — ситуация в Аргентине меняется быстро.</p>
-        <div class="leg-tags"><span class="tag"><b>база</b> · жить + работать</span></div>
-      </div>
-
     </div>
 
     <div class="callout">
-      <p><b>Дальше — открыто.</b> После Рио можно продлевать петлю (побережье Бразилии, Уругвай, Парагвай), развернуться обратно в Европу, или встать надолго в одном месте, если что-то зайдёт сильнее, чем ждали. Ничего в этом маршруте не завязано на жёсткие даты, кроме сезонных окон Патагонии и Уюни.</p>
-      <p><b>Что из списка целей осталось за бортом этого витка — и почему.</b> Водопад Анхель (Венесуэла) физически рядом, но добираться до Канаймы — это отдельные внутренние рейсы, экономика вне SWIFT и наличка на всё, плюс регион требует отдельной проверки безопасности прямо перед поездкой — разумнее решать отдельным заездом, а не втискивать в этот темп. Чичен-Ица и тако в Мексике, ретро-Куба и Бора-Бора — географически в других направлениях (Мексика тянет на отдельный залёт по пути в Европу или из неё, Бора-Бора — это уже Тихий океан) — не стал натягивать их на южноамериканскую петлю ради галочки.</p>
+      <p><b>Международные права нужны везде.</b> Украинское гражданство не входит в список стран-исключений Аргентины (туда входят Боливия, Бразилия, Чили, Колумбия, Парагвай, Уругвай) — то есть международное водительское (МВУ) обязательно в паре с обычным правами. Чили и Колумбия формально мягче, но прокатные конторы почти везде просят МВУ на месте — сделай одно на все три страны, оформляется в Украине за день по загранпаспорту и фото.</p>
+      <p><b>Депозит.</b> На кредитке нужна свободная сумма под холд — обычно 1000–2500 $ за прокат, замораживается на весь срок аренды и возвращается после сдачи машины без повреждений.</p>
+      <p><b>Уюни — не за рулём.</b> На солончаке нет дорог и разметки, GPS там ненадёжен, а погода/наводнения в сезон дождей реальны — это всегда организованный тур с местным водителем-гидом, самостоятельная аренда там просто не работает как формат.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Календарь</h2>
+    <p class="section-note">Даты — плановые, сдвинутся на ±несколько дней, когда лягут конкретные рейсы и пермит на тропу инков. Три точки, вокруг которых всё выстроено и трогать которые не стоит: карнавал в Рио 5–13 февраля, окно тропы инков до конца января (в феврале трек закрыт на обслуживание), и погодное окно Патагонии (открыто до конца марта).</p>
+
+    <div class="month">
+      <h3 class="month-h">Декабрь 2026</h3>
+      <div class="route">
+        <div class="leg" style="--leg-color:var(--leg-co)">
+          <div class="leg-head">
+            <span class="leg-name">Перелёт</span>
+            <span class="leg-when">22–23 дек</span>
+          </div>
+          <p class="leg-stops">Варшава → Медельин <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=El+Poblado+Medellin+Colombia" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Обычно 1–2 пересадки (Мадрид/Панама/Богота), в пути ~24–30 часов суммарно. Разница с Варшавой зимой −6 часов — прилетать лучше днём, чтобы не разбирать жильё ночью в незнакомом городе.</p>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-co)">
+          <div class="leg-head">
+            <span class="leg-name">Медельин</span>
+            <span class="leg-when">23 дек – 2 янв</span>
+          </div>
+          <p class="leg-stops">База: Эль-Побладо / Ларедо <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=El+Poblado+Medellin+Colombia" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Рождество и Новый год прямо здесь — с начала декабря по середину января вдоль реки Medellín разворачивают Alumbrados, одну из самых known световых инсталляций Латинской Америки, весь город гуляет по набережной вечерами. Побладо/Ларедо — район с самой плотной нома-тусовкой на континенте: коворкинги, кафе, англоязычные комьюнити-ивенты почти каждый день.</p>
+          <div class="leg-tags"><span class="tag"><b>база</b> · жить + работать</span><span class="tag">Alumbrados, Рождество/НГ</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="month">
+      <h3 class="month-h">Январь 2027</h3>
+      <div class="route">
+        <div class="leg" style="--leg-color:var(--leg-co)">
+          <div class="leg-head">
+            <span class="leg-name">Кофейный регион</span>
+            <span class="leg-when">3–6 янв</span>
+          </div>
+          <p class="leg-stops">Аренда авто → база Салённто <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Salento+Quindio+Colombia" target="_blank" rel="noopener">карта↗</a> → Валье-де-Кокора <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Valle+de+Cocora+Colombia" target="_blank" rel="noopener">карта↗</a>, Филандия <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Filandia+Quindio+Colombia" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Забирать машину проще в Армении или Перейре (полтора часа на такси/автобусе от Медельина, или доехать своим ходом — асфальт, горный серпантин, живописно, ~5–6 часов). Дороги здесь — самый мягкий вариант для первого раза за рулём в Южной Америке: разметка, указатели, риск только на трассах после заката вне городов.</p>
+          <div class="leg-tags"><span class="tag">🚗 автопробег #1</span><span class="tag">4 дня</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-co)">
+          <div class="leg-head">
+            <span class="leg-name">Медельин</span>
+            <span class="leg-when">7–10 янв</span>
+          </div>
+          <p class="leg-stops">Возврат на базу <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=El+Poblado+Medellin+Colombia" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Буфер: разобрать рабочие дела, собраться, сдать машину если брал с собой в город (парковка в Побладо платная и небольшая — удобнее сдать в аэропорту José María Córdova перед вылетом).</p>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-pe)">
+          <div class="leg-head">
+            <span class="leg-name">Куско</span>
+            <span class="leg-when">11–13 янв</span>
+          </div>
+          <p class="leg-stops">Перелёт Медельин → Лима → Куско <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Cusco+Peru" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Высота ~3400 м — это не мелочь: первые 2–3 дня без алкоголя, без тяжёлых нагрузок, много воды, коку в чай пить стоит вопреки скепсису, реально помогает. Здесь же — аренда авто не рекомендую: город тесный, колониальные улицы, агрессивный местный трафик, плюс акклиматизация — такси и организованные трансферы проще и безопаснее.</p>
+          <div class="leg-tags"><span class="tag">высота ~3400 м</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-pe)">
+          <div class="leg-head">
+            <span class="leg-name">Священная долина</span>
+            <span class="leg-when">14–16 янв</span>
+          </div>
+          <p class="leg-stops">Писак <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Pisac+Peru" target="_blank" rel="noopener">карта↗</a> → Ольянтайтамбо <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Ollantaytambo+Peru" target="_blank" rel="noopener">карта↗</a> → Морай и соляные террасы Марас <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Maras+Salt+Ponds+Peru" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Обычно берут такси/коллективо на день или организованный тур — дорога петляет по горам, а после Куско туда всё равно едет весь транспорт. Ольянтайтамбо удобен как ночёвка перед стартом трека — оттуда утром отходят поезда и автобусы к началу тропы инков.</p>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-pe)">
+          <div class="leg-head">
+            <span class="leg-name">Тропа инков → Мачу-Пикчу</span>
+            <span class="leg-when">17–20 янв</span>
+          </div>
+          <p class="leg-stops">4 дня / 3 ночи трека → Мачу-Пикчу <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Machu+Picchu+Peru" target="_blank" rel="noopener">карта↗</a> → ночь в Агуас-Кальентес <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Aguas+Calientes+Peru" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Пермит именной и непередаваемый — оператор при бронировании берёт номер паспорта и на трек с другим человеком просто не пустят на КПП. Даты почти наверняка сдвинутся на пару дней от плана — под то, на какой день реально есть свободная квота, а не наоборот.</p>
+          <div class="leg-tags"><span class="tag"><b>из списка</b> · тропа инков</span><span class="tag">пермит именной</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-pe)">
+          <div class="leg-head">
+            <span class="leg-name">Тамбопата</span>
+            <span class="leg-when">22–24 янв</span>
+          </div>
+          <p class="leg-stops">Куско → Пуэрто-Мальдонадо <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Puerto+Maldonado+Peru" target="_blank" rel="noopener">карта↗</a> → лодж в резервате Тамбопата <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Tambopata+National+Reserve+Peru" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Короткий перелёт (~35 мин) вместо многочасовой дороги — резко другая высота (250 м вместо 3400), тепло и влажно. Лодж всё включено: питание, гид, лодка, ночная прогулка по джунглям — по сути и есть та самая «хижина в джунглях» из списка.</p>
+          <div class="leg-tags"><span class="tag"><b>из списка</b> · джунгли Амазонки, хижина в джунглях</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-pe)">
+          <div class="leg-head">
+            <span class="leg-name">Куско</span>
+            <span class="leg-when">25–26 янв</span>
+          </div>
+          <p class="leg-stops">Буфер перед перелётом в Чили</p>
+          <p class="leg-note">Специально оставлен пустым — если пермит на трек сдвинется или рейс из Тамбопаты задержится (это Амазония, дожди случаются), здесь есть куда сдвинуть план без цепной реакции на Атакаму.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="month">
+      <h3 class="month-h">Февраль 2027</h3>
+      <div class="route">
+        <div class="leg" style="--leg-color:var(--leg-at)">
+          <div class="leg-head">
+            <span class="leg-name">Сан-Педро-де-Атакама</span>
+            <span class="leg-when">27–30 янв</span>
+          </div>
+          <p class="leg-stops">База в пустыне <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=San+Pedro+de+Atacama+Chile" target="_blank" rel="noopener">карта↗</a> — Долина Луны <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Valle+de+la+Luna+San+Pedro+de+Atacama" target="_blank" rel="noopener">карта↗</a>, лагуна Сехар <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Laguna+Cejar+Chile" target="_blank" rel="noopener">карта↗</a>, вулкан Ликанкабур <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Licancabur+Volcano" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Единственное место на маршруте, где можно самому взять машину прямо в пустынном городке — дороги простые, грунтовки промаркированы, прокат прямо на главной улице San Pedro. На гейзеры Татио и подъём на кратер Ликанкабура лучше идти с гидом: ранний старт затемно и высота больше 5000 м у кратера — не соло-формат.</p>
+          <div class="leg-tags"><span class="tag"><b>из списка</b> · кратер вулкана</span><span class="tag">высота ~2400–5900 м</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-at)">
+          <div class="leg-head">
+            <span class="leg-name">Уюни</span>
+            <span class="leg-when">31 янв – 2 фев</span>
+          </div>
+          <p class="leg-stops">Организованный тур 3 дня / 2 ночи через погранпереход Ито-Кахон <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Salar+de+Uyuni+Bolivia" target="_blank" rel="noopener">карта↗</a> → город Уюни <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Uyuni+Bolivia" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Тур забирает прямо из Сан-Педро — сам погранпереход оформляет водитель-гид, паспорт нужен только показать. Именно в это время на солончаке стоит тонкий слой воды — тот самый эффект зеркала. Наличка (боливиано или доллары) — карты в этой части маршрута почти нигде не работают.</p>
+          <div class="leg-tags"><span class="tag"><b>из списка</b> · соляное озеро</span><span class="tag">только кэш</span><span class="tag">не за рулём</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-at)">
+          <div class="leg-head">
+            <span class="leg-name">Переезд в Рио</span>
+            <span class="leg-when">3–4 фев</span>
+          </div>
+          <p class="leg-stops">Уюни → Ла-Пас/Санта-Крус → Сан-Паулу → Рио-де-Жанейро</p>
+          <p class="leg-note"><b>Никаких других планов на эти два дня.</b> Это единственный буфер перед жёсткой датой карнавала — если тур на Уюни или рейс из Ла-Паса сдвинется на день, это всё ещё покрыто запасом.</p>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-br)">
+          <div class="leg-head">
+            <span class="leg-name">Рио-де-Жанейро</span>
+            <span class="leg-when">5–15 фев</span>
+          </div>
+          <p class="leg-stops">Карнавал 5–13 февраля <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Sambodromo+Rio+de+Janeiro" target="_blank" rel="noopener">карта↗</a> · статуя Христа <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Christ+the+Redeemer+Rio+de+Janeiro" target="_blank" rel="noopener">карта↗</a> · Копакабана <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Copacabana+Beach+Rio+de+Janeiro" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note"><b>Жёсткая точка всего маршрута.</b> Жильё и перелёты на карнавальную неделю дорожают в 3–4 раза и разбираются на полгода вперёд — бронировать нужно уже сейчас, не откладывая. После 13-го — ещё пара дней на пляж и отойти от недели без сна, прежде чем ехать дальше.</p>
+          <div class="leg-tags"><span class="tag"><b>из списка</b> · Рио, карнавал</span><span class="tag">бронь заранее</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-br)">
+          <div class="leg-head">
+            <span class="leg-name">Игуасу</span>
+            <span class="leg-when">16–20 фев</span>
+          </div>
+          <p class="leg-stops">Аргентинская сторона: Пуэрто-Игуасу <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Puerto+Iguazu+Argentina" target="_blank" rel="noopener">карта↗</a> · бразильская: Фос-ду-Игуасу <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Foz+do+Iguacu+Brazil" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Заходить на водопады нужно с обеих сторон границы (виза для Украины не нужна ни туда, ни туда, погранпереход стандартный автобусный) — с аргентинской стороны ты внутри водопадов, с бразильской — общая панорама. За один день не совместить нормально, закладывай два разных захода.</p>
+          <div class="leg-tags"><span class="tag"><b>из списка</b> · Игуасу</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="month">
+      <h3 class="month-h">Март 2027</h3>
+      <div class="route">
+        <div class="leg" style="--leg-color:var(--leg-pt)">
+          <div class="leg-head">
+            <span class="leg-name">Эль-Калафате</span>
+            <span class="leg-when">21 фев – 25 фев</span>
+          </div>
+          <p class="leg-stops">Перелёт через Буэнос-Айрес → база <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=El+Calafate+Argentina" target="_blank" rel="noopener">карта↗</a> · ледник Перито-Морено <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Perito+Moreno+Glacier+Argentina" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Здесь же — прокат авто #2 (первый был в Колумбии). Ледник смотреть можно и без машины (организованные автобусы каждый день), но с арендой удобнее подстроить время под свет и толпы.</p>
+          <div class="leg-tags"><span class="tag">🚗 автопробег #2 · Аргентина</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-pt)">
+          <div class="leg-head">
+            <span class="leg-name">Эль-Чальтен</span>
+            <span class="leg-when">25 фев – 1 мар</span>
+          </div>
+          <p class="leg-stops">Своим ходом <a class="maplink" href="https://www.google.com/maps/dir/?api=1&origin=El+Calafate+Argentina&destination=El+Chalten+Argentina" target="_blank" rel="noopener">маршрут на карте↗</a> (~3 ч, асфальт) — база у подножья Фитц-Роя <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Fitz+Roy+Argentina" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Столица трекинга Патагонии — тропы начинаются прямо из посёлка, машина стоит на месте всё время, ходишь налегке. Погода меняется за час, слои одежды обязательны в любой день.</p>
+          <div class="leg-tags"><span class="tag"><b>из списка</b> · Патагония</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-pt)">
+          <div class="leg-head">
+            <span class="leg-name">Граница → Пуэрто-Наталес</span>
+            <span class="leg-when">1–4 мар</span>
+          </div>
+          <p class="leg-stops">Возврат авто в Эль-Калафате → автобус-шаттл через границу → база <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Puerto+Natales+Chile" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Ежедневные автобусы, ~5–6 часов с погранпереходом — проще и дешевле, чем разрешение на трансграничную аренду. Прокат авто #3 бери сразу здесь или в Пунта-Аренасе (там выбор шире и обычно дешевле).</p>
+          <div class="leg-tags"><span class="tag">🚗 автопробег #2 · Чили</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-pt)">
+          <div class="leg-head">
+            <span class="leg-name">Торрес-дель-Пайне</span>
+            <span class="leg-when">4–9 мар</span>
+          </div>
+          <p class="leg-stops">Национальный парк <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Torres+del+Paine+National+Park+Chile" target="_blank" rel="noopener">карта↗</a> <a class="maplink" href="https://www.google.com/maps/dir/?api=1&origin=Puerto+Natales+Chile&destination=Torres+del+Paine+National+Park&travelmode=driving" target="_blank" rel="noopener">маршрут↗</a></p>
+          <p class="leg-note">Последнее по-настоящему тёплое окно сезона — к концу марта треки и рефухио массово закрываются на зиму. Часть W-трека можно пройти дневными вылазками на машине до трейлхедов, не обязательно тащить рюкзак с ночёвками — но рефухио/кемпинги бронировать нужно заранее, места разлетаются за месяцы.</p>
+          <div class="leg-tags"><span class="tag"><b>из списка</b> · Патагония</span><span class="tag">бронь заранее</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-pt)">
+          <div class="leg-head">
+            <span class="leg-name">Пунта-Аренас</span>
+            <span class="leg-when">9–11 мар</span>
+          </div>
+          <p class="leg-stops">Сдача авто <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Punta+Arenas+Chile" target="_blank" rel="noopener">карта↗</a> → перелёт в Буэнос-Айрес</p>
+          <p class="leg-note">Крупный хаб проката в этой части Патагонии — Keddy/Europcar/Avis все представлены, обычно дешевле, чем в Пуэрто-Наталесе.</p>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-ba)">
+          <div class="leg-head">
+            <span class="leg-name">Буэнос-Айрес</span>
+            <span class="leg-when">12 мар – 1 апр</span>
+          </div>
+          <p class="leg-stops">База: Палермо / Реколета <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Palermo+Buenos+Aires+Argentina" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Вторая «база жизни» после переездного отрезка: отдых, рабочий ритм, коворкинги не хуже Медельина. Машина в городе не нужна и не стоит того — узкие улицы, платные парковки, метро и такси/Uber покрывают всё. Опциональная вылазка без машины — дельта Тигре <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Tigre+Delta+Argentina" target="_blank" rel="noopener">карта↗</a>, час на электричке. Курс для тех, кто платит в валюте, — смотреть непосредственно перед приездом, ситуация в Аргентине живая.</p>
+          <div class="leg-tags"><span class="tag"><b>база</b> · жить + работать</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="month">
+      <h3 class="month-h">Апрель 2027</h3>
+      <div class="route">
+        <div class="leg" style="--leg-color:var(--leg-mz)">
+          <div class="leg-head">
+            <span class="leg-name">Мендоса</span>
+            <span class="leg-when">2–15 апр</span>
+          </div>
+          <p class="leg-stops">Перелёт/автобус из Буэнос-Айреса → база <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Mendoza+Argentina" target="_blank" rel="noopener">карта↗</a>, аренда авто на весь отрезок</p>
+          <p class="leg-note">Самый спокойный автопробег из трёх — равнинные дороги виноделен вокруг города (Чакрас-де-Кория <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Chacras+de+Coria+Mendoza" target="_blank" rel="noopener">карта↗</a>, Мaйпу, Лухан-де-Куйо), без гравия и высоты Патагонии. Один день — вьюпоинт на Аконкагуа в сторону чилийской границы, машину дальше границы не гонять, просто смотровая. Дегустации и вождение по местным законам не совмещают — на каждую винодельню либо назначенный водитель на день, либо сплёвывать вино, как это принято на дегустациях.</p>
+          <div class="leg-tags"><span class="tag">🚗 автопробег #3</span></div>
+        </div>
+        <div class="leg" style="--leg-color:var(--leg-uy)">
+          <div class="leg-head">
+            <span class="leg-name">Уругвай</span>
+            <span class="leg-when">16–22 апр</span>
+          </div>
+          <p class="leg-stops">Буэнос-Айрес → паром → Колония-дель-Сакраменто <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Colonia+del+Sacramento+Uruguay" target="_blank" rel="noopener">карта↗</a> → Монтевидео <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Montevideo+Uruguay" target="_blank" rel="noopener">карта↗</a> → Пунта-дель-Эсте / Хосе-Игнасио <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Jose+Ignacio+Uruguay" target="_blank" rel="noopener">карта↗</a></p>
+          <p class="leg-note">Паром из порта Буэнос-Айреса — 1 час до Колонии, самый простой международный переход на всём маршруте (билет онлайн, паспорт на границе прямо в терминале). В апреле там осень — пляжи спокойные, без летней толпы. Машина не нужна, автобусы между городами частые и дешёвые.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="month">
+      <h3 class="month-h">Май 2027</h3>
+      <div class="route">
+        <div class="leg is-open" style="--leg-color:var(--muted)">
+          <div class="leg-head">
+            <span class="leg-name">Открытый хвост</span>
+            <span class="leg-when">23 апр – 22 мая</span>
+          </div>
+          <p class="leg-stops">~4.5 недели без брони</p>
+          <p class="leg-note">Ничего здесь не завязано на сезон или пермит — бронировать заранее не критично. Три варианта на выбор по ходу: продлить то место, которое зайдёт сильнее всего; добавить спокойный кусок бразильского побережья (Флорианополис — остров, ещё один лёгкий автопробег, если машина не надоела); или начать сворачивать обратно в сторону Европы через Буэнос-Айрес. Это ровно та передышка, которую ты просил, — реальный буфер, а не ещё один плотный отрезок.</p>
+          <div class="leg-tags"><span class="tag">не бронируем заранее</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><b>Итого:</b> около 16 смен места за 152 дня — в среднем раз в 9 дней, из них дольше недели на одном месте — 10 остановок из 16. Это не Сицилия, где каждую ночь новый город: в этом маршруте почти каждая неделя — база с вылазками, а не переезд.</p>
+      <p><b>Что из списка целей осталось за бортом — и почему.</b> Дайвинг (#143) в этот виток сознательно не воткнут — ближайший достойный вариант, Галапагосы, тянет за собой отдельную страну (Эквадор) и рушит темп; решим отдельно, когда будет ясно, где физически окажешься к тому моменту. Водопад Анхель (Венесуэла) — логистика (внутренние рейсы, экономика вне SWIFT, наличка на всё) и отдельная проверка безопасности перед поездкой — разумнее отдельным заездом. Чичен-Ица/тако в Мексике, Куба, Бора-Бора — просто в других концах света.</p>
     </div>
   </section>
 
@@ -398,11 +661,11 @@ footer{
           <tr><th>Режим</th><th class="num">Диапазон / мес</th><th>Когда</th></tr>
         </thead>
         <tbody>
-          <tr><td>База (жильё + быт, оседло)</td><td class="num">2 800 – 3 500 €</td><td>Колумбия, Буэнос-Айрес</td></tr>
-          <tr><td>Активный переезд (отели, туры, внутренние перелёты)</td><td class="num">4 500 – 6 500 €</td><td>Перу, Атакама/Боливия, Патагония, Игуасу–Рио</td></tr>
+          <tr><td>База (жильё + быт, оседло)</td><td class="num">2 800 – 3 500 €</td><td>Колумбия, Буэнос-Айрес, Мендоса</td></tr>
+          <tr><td>Активный переезд (отели, туры, авто, внутренние перелёты)</td><td class="num">4 500 – 6 500 €</td><td>Перу, Атакама/Боливия, Рио–Игуасу, Патагония</td></tr>
         </tbody>
         <tfoot>
-          <tr><td>Смешанный средний по всей поездке</td><td class="num">~3 800 – 4 500 €</td><td>5–6 месяцев, Nov–Apr</td></tr>
+          <tr><td>Смешанный средний по всей поездке</td><td class="num">~3 800 – 4 500 €</td><td>5 месяцев, 22 дек – 22 мая</td></tr>
         </tfoot>
       </table>
     </div>
@@ -414,20 +677,25 @@ footer{
           <tr><th>Статья</th><th class="num">Диапазон</th></tr>
         </thead>
         <tbody>
+          <tr><td>Аренда авто: Колумбия, кофейный регион, ~4 дня</td><td class="num">90 – 150 €</td></tr>
           <tr><td>Тропа инков: 4-дневный трек, пермит + гид + носильщики</td><td class="num">1 400 – 1 900 €</td></tr>
           <tr><td>Тамбопата: лодж в джунглях, 3 ночи всё включено</td><td class="num">700 – 1 100 €</td></tr>
           <tr><td>Уюни: тур 2–3 дня из Боливии</td><td class="num">300 – 500 €</td></tr>
           <tr><td>Рио: жильё на карнавальную неделю (наценка ×3-4 к обычной)</td><td class="num">800 – 1 500 €</td></tr>
-          <tr><td>Патагония: рефухио/кемпинг W-трек, ~5–6 ночей</td><td class="num">1 200 – 2 200 €</td></tr>
-          <tr><td>Игуасу: перелёт + вход на обе стороны</td><td class="num">350 – 550 €</td></tr>
-          <tr><td>Внутренние перелёты по континенту (6–10 перелётов всего)</td><td class="num">2 000 – 3 500 €</td></tr>
-          <tr><td>Страховка на двоих, 5–6 мес. (с покрытием высотного треккинга)</td><td class="num">700 – 1 100 €</td></tr>
+          <tr><td>Игуасу: вход на обе стороны + переход границы</td><td class="num">150 – 250 €</td></tr>
+          <tr><td>Аренда авто: Патагония, 2 проката (Аргентина + Чили), ~2.5 недели</td><td class="num">750 – 1 200 €</td></tr>
+          <tr><td>Шаттл Эль-Калафате → Пуэрто-Наталес (граница)</td><td class="num">60 – 90 €</td></tr>
+          <tr><td>Патагония: рефухио/кемпинг Торрес-дель-Пайне, ~5 ночей</td><td class="num">1 200 – 2 200 €</td></tr>
+          <tr><td>Аренда авто: Мендоса, ~1.5 недели + дегустации</td><td class="num">350 – 550 €</td></tr>
+          <tr><td>Паром Буэнос-Айрес ↔ Колония (Уругвай)</td><td class="num">100 – 160 €</td></tr>
+          <tr><td>Внутренние перелёты по континенту (6–8 перелётов всего)</td><td class="num">1 800 – 3 000 €</td></tr>
+          <tr><td>Страховка на двоих, 5 мес. (высотный треккинг + аренда авто)</td><td class="num">750 – 1 150 €</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="callout">
-      <p>Перелёты внутри Южной Америки — статья, которую обычно недооценивают: расстояния здесь как в США, а не как в Европе, Патагония и Атакама от Буэнос-Айреса и Лимы — это часа 3-4 лёта, не автобус за вечер.</p>
+      <p>Перелёты внутри Южной Америки — статья, которую обычно недооценивают: расстояния здесь как в США, а не как в Европе. Три аренды авто и шаттл через границу в этой версии плана заменяют часть перелётов, но не все — Патагония и Атакама всё равно требуют долгих перелётов от остального маршрута.</p>
       <p>Вся сумма (база + разовые траты) укладывается в 12-месячную подушку, о которой договорились раньше — <b>инвестиционное ядро эту поездку не финансирует</b>.</p>
     </div>
   </section>
@@ -438,10 +706,26 @@ footer{
     <div class="check-grid" id="checklist">
 
       <div class="check-group">
+        <h3>Машина</h3>
+        <label class="check-item" data-id="car-1">
+          <input type="checkbox">
+          <span class="check-text">Международное водительское удостоверение<span>одно на все три страны, делается в Украине за день по загранпаспорту и фото</span></span>
+        </label>
+        <label class="check-item" data-id="car-2">
+          <input type="checkbox">
+          <span class="check-text">Кредитка с лимитом под депозит<span>1000–2500 $ холда за прокат, замораживается на весь срок аренды</span></span>
+        </label>
+        <label class="check-item" data-id="car-3">
+          <input type="checkbox">
+          <span class="check-text">Шаттл Эль-Калафате → Пуэрто-Наталес — забронировать заранее<span>в высокий сезон места на популярные рейсы уходят за недели</span></span>
+        </label>
+      </div>
+
+      <div class="check-group">
         <h3>Здоровье и высота</h3>
         <label class="check-item" data-id="alt-1">
           <input type="checkbox">
-          <span class="check-text">План акклиматизации в Куско / Ла-Пасе / Уюни<span>2–3 дня без нагрузок на старте каждого высотного отрезка</span></span>
+          <span class="check-text">План акклиматизации в Куско / Атакаме<span>2–3 дня без нагрузок на старте каждого высотного отрезка</span></span>
         </label>
         <label class="check-item" data-id="alt-2">
           <input type="checkbox">
@@ -469,7 +753,7 @@ footer{
         </label>
         <label class="check-item" data-id="mn-3">
           <input type="checkbox">
-          <span class="check-text">eSIM или локальные SIM по странам<span>Колумбия, Перу, Чили/Боливия, Аргентина, Бразилия — разные</span></span>
+          <span class="check-text">eSIM или локальные SIM по странам<span>Колумбия, Перу, Чили/Боливия, Аргентина, Бразилия, Уругвай — разные</span></span>
         </label>
       </div>
 
@@ -485,7 +769,7 @@ footer{
         </label>
         <label class="check-item" data-id="vz-3">
           <input type="checkbox">
-          <span class="check-text">Бронь W-трека в Торрес-дель-Пайне<span>рефухио разбирают за месяцы вперёд</span></span>
+          <span class="check-text">Бронь рефухио в Торрес-дель-Пайне<span>разбирают за месяцы вперёд</span></span>
         </label>
         <label class="check-item" data-id="vz-4">
           <input type="checkbox">
@@ -496,7 +780,7 @@ footer{
     </div>
   </section>
 
-  <footer>Черновик маршрута для планирования, не бронь. Цены и визовые правила стоит сверять ближе к датам каждого отрезка.</footer>
+  <footer>Черновик маршрута для планирования, не бронь. Цены, визовые правила и требования к аренде авто стоит сверять ближе к датам каждого отрезка.</footer>
 
 </div>
 
